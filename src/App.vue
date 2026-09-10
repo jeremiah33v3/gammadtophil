@@ -45,7 +45,7 @@ const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', 
       </div>
     </section>
 
-    <section id="calling" class="calling section-shell section-cream">
+    <section id="calling" class="calling section-shell section-calling">
       <div class="calling-overview">
         <div class="section-heading"><p class="eyebrow">God's call on our lives</p><h2>Every step prepared<br />the way forward.</h2></div>
         <div class="calling-note prose"><p>After twenty-five years in a career that brought security and comfort, God made His direction clear. On January 21, 2026, our family surrendered to follow His call into full-time missions.</p><button class="text-link" type="button" @click="openModal('calling')">Read full story →</button></div>
