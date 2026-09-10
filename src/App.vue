@@ -46,13 +46,15 @@ const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', 
     </section>
 
     <section id="calling" class="calling section-shell section-cream">
-      <div class="calling-layout">
+      <div class="calling-overview">
         <div class="section-heading"><p class="eyebrow">God's call on our lives</p><h2>Every step prepared<br />the way forward.</h2></div>
         <div class="calling-note prose"><p>After twenty-five years in a career that brought security and comfort, God made His direction clear. On January 21, 2026, our family surrendered to follow His call into full-time missions.</p><button class="text-link" type="button" @click="openModal('calling')">Read full story →</button></div>
+      </div>
+      <div class="calling-body">
         <ol class="timeline"><li><strong>2004</strong><span>Rommel saved by God's grace</span></li><li><strong>2019</strong><span>Joined Northwest Bible Baptist Church</span></li><li><strong>2020</strong><span>God renewed a burden for ministry</span></li><li><strong>2025</strong><span>Ministry training at Providence Baptist College</span></li><li><strong>2026</strong><span>Surrendered to full-time missions in the Philippines</span></li></ol>
         <div class="calling-photos"><figure><img :src="graduationPhoto" alt="The Gammad family with a pastor" /></figure></div>
-        <div class="calling-gallery"><figure><img :src="nursingHomePhoto" alt="Preaching in a nursing home ministry" /><figcaption>Teaching the Word</figcaption></figure><figure><img :src="bibleHandoutPhoto" alt="Handing out Bibles" /><figcaption>Sharing the Gospel</figcaption></figure><figure><img :src="bibleHandoutPhoto2" alt="Handing out Bibles in the community" /><figcaption>Sharing the Gospel</figcaption></figure><figure><img :src="bibleStudyPhoto" alt="Sharing God's Word in a Bible study" /><figcaption>Sharing the Gospel</figcaption></figure></div>
       </div>
+      <div class="calling-gallery"><figure><img :src="nursingHomePhoto" alt="Preaching in a nursing home ministry" /><figcaption>Teaching the Word</figcaption></figure><figure><img :src="bibleHandoutPhoto" alt="Handing out Bibles" /><figcaption>Sharing the Gospel</figcaption></figure><figure><img :src="bibleHandoutPhoto2" alt="Handing out Bibles in the community" /><figcaption>Sharing the Gospel</figcaption></figure><figure><img :src="bibleStudyPhoto" alt="Sharing God's Word in a Bible study" /><figcaption>Sharing the Gospel</figcaption></figure></div>
     </section>
 
     <section id="vision" class="vision section-shell">
