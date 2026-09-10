@@ -17,8 +17,28 @@ import doorToDoorPhoto from './assets/door to door soul winning.JPG?url'
 type Modal = 'rommel' | 'shiela' | 'ryle' | 'calling' | null
 const menuOpen = ref(false)
 const activeModal = ref<Modal>(null)
+const contactStatus = ref<'idle' | 'sending' | 'success' | 'error'>('idle')
 const closeMenu = () => (menuOpen.value = false)
 const openModal = (modal: Exclude<Modal, null>) => (activeModal.value = modal)
+const submitContact = async (event: SubmitEvent) => {
+  const form = event.currentTarget
+  if (!(form instanceof HTMLFormElement)) return
+
+  contactStatus.value = 'sending'
+
+  try {
+    const response = await fetch('https://formspree.io/f/moeqrlqv', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { Accept: 'application/json' },
+    })
+
+    contactStatus.value = response.ok ? 'success' : 'error'
+    if (response.ok) form.reset()
+  } catch {
+    contactStatus.value = 'error'
+  }
+}
 const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', '#calling'], ['Vision', '#vision'], ['Prayer', '#prayer'], ['Support', '#support'], ['Contact', '#contact']]
 </script>
 
@@ -65,7 +85,7 @@ const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', 
 
     <section id="prayer" class="prayer section-shell section-navy"><div class="section-heading light-heading"><p class="eyebrow">Please pray for</p><h2>Labourers for<br />the harvest.</h2></div><ol class="prayer-list"><li>A specific area and location to serve</li><li>A church building and start-up fund</li><li>Wisdom, good health, and safety during deputation</li><li>Churches to partner with us</li><li>Salvation and discipleship of lost souls</li></ol><a class="button button-gold" href="mailto:gammadtophilippines@gmail.com?subject=We%20are%20praying%20for%20you">Tell Us You Are Praying</a></section>
     <section id="support" class="support section-shell section-gold"><div><p class="eyebrow">Partner with us</p><h2>Together, we can reach the Philippines for Christ.</h2></div><div class="support-copy"><p>Your prayers, encouragement, and financial support make this ministry possible. Thank you for considering a partnership with our family.</p><a class="button button-navy" href="mailto:gammadtophilippines@gmail.com?subject=Support%20the%20Gammad%20Family">Ask About Supporting</a></div></section>
-    <section id="contact" class="contact section-shell section-cream"><div class="section-heading"><p class="eyebrow">Contact us</p><h2>Let's connect.</h2></div><address><a href="mailto:gammadtophilippines@gmail.com"><span>Email</span> gammadtophilippines@gmail.com</a><a href="tel:+17738071597"><span>Phone</span> 773-807-1597</a><p><span>Sending church</span> Northwest Bible Baptist Church<br />9N889 Nesler Road, Elgin, IL 60124</p><p><span>Mission board</span> Northwest Bible Baptist Missions<br />9N889 Nesler Road, Elgin, IL 60124</p></address></section>
+    <section id="contact" class="contact section-shell section-cream"><div class="section-heading"><p class="eyebrow">Contact us</p><h2>Let's connect.</h2></div><div class="contact-content"><address><a href="mailto:gammadtophilippines@gmail.com"><span>Email</span> gammadtophilippines@gmail.com</a><a href="tel:+17738071597"><span>Phone</span> 773-807-1597</a><p><span>Sending church</span> Northwest Bible Baptist Church<br />9N889 Nesler Road, Elgin, IL 60124</p><p><span>Mission board</span> Northwest Bible Baptist Missions<br />9N889 Nesler Road, Elgin, IL 60124</p></address><form class="contact-form" aria-label="Send a message" @submit.prevent="submitContact"><input type="hidden" name="_subject" value="New message from the Gammad family website" /><label for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name" required /><label for="contact-email">Email</label><input id="contact-email" name="email" type="email" autocomplete="email" required /><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="6" required></textarea><button class="button button-navy" type="submit" :disabled="contactStatus === 'sending'">{{ contactStatus === 'sending' ? 'Sending…' : 'Send Message' }}</button><p v-if="contactStatus === 'success'" class="form-status form-success" role="status">Your message has been sent. Thank you for reaching out.</p><p v-else-if="contactStatus === 'error'" class="form-status form-error" role="alert">Something went wrong. Please try again or email us directly.</p></form></div></section>
   </main>
   <footer><p>© {{ new Date().getFullYear() }} The Gammad Family</p><p>Missionaries to the Philippines</p><a href="#home">Back to top ↑</a></footer>
 
