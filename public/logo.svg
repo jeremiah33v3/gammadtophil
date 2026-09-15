@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 300" role="img" aria-labelledby="logo-title logo-description">
+  <title id="logo-title">The Gammad Family</title>
+  <desc id="logo-description">The Gammad Family, missionaries to the Philippines.</desc>
+  <defs>
+    <g id="mission-mark" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g stroke="#b87818" stroke-width="16">
+        <path d="m164 130-24-42" />
+        <path d="M256 111V65" />
+        <path d="m348 130 24-42" />
+      </g>
+      <path d="M256 112v214M190 180h132" stroke="#06294b" stroke-width="30" />
+      <path d="M94 360c21-91 86-151 162-151s141 60 162 151" stroke="#06294b" stroke-width="18" />
+      <path d="M118 379c41 25 87 38 138 38s97-13 138-38" stroke="#b87818" stroke-width="14" />
+      <g fill="#b87818" stroke="none">
+        <path d="M122 380c21 10 42 14 64 13-17 13-38 17-61 10-8-2-15-5-22-10z" />
+        <path d="M230 406c17 6 34 6 51 0-8 15-20 23-36 23s-28-8-36-23c7 3 14 3 21 0z" />
+        <path d="M326 393c22 1 43-3 64-13l19 13c-7 5-14 8-22 10-23 7-44 3-61-10z" />
+      </g>
+    </g>
+  </defs>
+  <use href="#mission-mark" transform="translate(7 8) scale(.5)" />
+  <g fill="#06294b">
+    <text x="304" y="76" font-family="'DM Mono', 'Courier New', monospace" font-size="20" font-weight="500" letter-spacing="5.5">PRAY FOR THE</text>
+    <text x="302" y="157" font-family="Georgia, 'Times New Roman', serif" font-size="65" font-weight="700" letter-spacing="3">GAMMAD</text>
+    <text x="650" y="157" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-style="italic">Family</text>
+    <rect x="304" y="188" width="660" height="1" fill="#d8b36d" />
+    <text x="304" y="225" font-family="'DM Mono', 'Courier New', monospace" font-size="16" font-weight="500" letter-spacing="4.5" fill="#b87818">MISSIONARIES TO THE PHILIPPINES</text>
+  </g>
+</svg>

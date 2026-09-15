@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#f8f0e3" />
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="logo-mark-title logo-mark-description">
+  <title id="logo-mark-title">The Gammad Family mission mark</title>
+  <desc id="logo-mark-description">A cross framed by a rising sun and three island-like strokes.</desc>
+  <g id="logo-mark" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <g stroke="#b87818" stroke-width="16">
       <path d="m164 130-24-42" />
       <path d="M256 111V65" />
