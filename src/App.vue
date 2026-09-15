@@ -13,7 +13,7 @@ import garmentPhoto from './assets/preaching at garment factory.JPG?url'
 import preachingYouthPhoto from './assets/preaching at youth fellowship.JPG?url'
 import doorToDoorPhoto from './assets/door to door soul winning.JPG?url'
 import blackNazarenePhoto from './assets/black nazarene 2.jpg?url'
-import staMariaPhoto from './assets/SMGV2530.JPG?url'
+import staMariaPhoto from './assets/Sharing the Gospel in the Sta Maria.jpg?url'
 
 type Modal = 'rommel' | 'shiela' | 'ryle' | 'calling' | null
 const menuOpen = ref(false)
