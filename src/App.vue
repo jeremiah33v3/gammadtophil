@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import brandLogo from './assets/Gammad_to_the_Philippines_Logo_Transparent.png'
 import familyPhoto from './assets/gammad-family.jpeg'
 import familyPhoto2 from './assets/Family Picture 3.png?url'
 import philippinesMap from './assets/philippines-map.svg'
@@ -61,7 +62,7 @@ const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', 
 
 <template>
   <header class="site-header">
-    <a class="brand" href="#home" @click="closeMenu"><img class="brand-mark" src="/logo-mark.svg" alt="" aria-hidden="true" /><span class="brand-copy"><span class="brand-kicker">Pray for the</span><span class="brand-name"><strong>Gammad</strong><span>Family</span></span></span></a>
+    <a class="brand" href="#home" @click="closeMenu"><img class="brand-logo" :src="brandLogo" alt="Gammad to the Philippines" /></a>
     <button class="menu-toggle" type="button" :aria-expanded="menuOpen" aria-controls="site-navigation" @click="menuOpen = !menuOpen"><span></span><span></span><span></span><span class="sr-only">Toggle navigation</span></button>
     <nav id="site-navigation" :class="{ open: menuOpen }" aria-label="Main navigation"><a v-for="[label, href] in navigation" :key="href" :href="href" @click="closeMenu">{{ label }}</a><a class="nav-give" href="#support" @click="closeMenu">Partner With Us</a></nav>
   </header>
