@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import brandLogo from './assets/Gammad_to_the_Philippines_Logo_Transparent.png'
 import familyPhoto from './assets/gammad-family.jpeg'
-import familyPhoto2 from './assets/Family Picture 3.png?url'
+import familyPhoto2 from './assets/Family Picture 2.JPG?url'
 import philippinesMap from './assets/philippines-map.svg'
 import nursingHomePhoto from './assets/nursing home preaching 1.jpeg'
 import bibleHandoutPhoto from './assets/bible handout.jpeg'
