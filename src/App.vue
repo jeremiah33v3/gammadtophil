@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import brandLogo from './assets/Gammad_to_the_Philippines_Logo_Transparent.png'
 import familyPhoto from './assets/gammad-family.jpeg'
 import familyPhoto2 from './assets/Family Picture 2.JPG?url'
@@ -17,13 +17,73 @@ import blackNazarenePhoto from './assets/black nazarene 2.jpg?url'
 import staMariaPhoto from './assets/Sharing the Gospel in the Sta Maria.jpg?url'
 
 type Modal = 'rommel' | 'shiela' | 'ryle' | 'calling' | null
+type ScheduleEvent = {
+  church: string
+  event: string
+  startDate: string
+  endDate: string
+  day: string
+  location: string
+  notes: string
+}
 const menuOpen = ref(false)
 const activeModal = ref<Modal>(null)
 const contactStatus = ref<'idle' | 'sending' | 'success' | 'error'>('idle')
 const contactError = ref('')
+const scheduleEvents = ref<ScheduleEvent[]>([])
+const scheduleStatus = ref<'loading' | 'ready' | 'error'>('loading')
 const formspreeEndpoint = 'https://formspree.io/f/moeqrlqv'
+const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQverJcq0felR6sZCasQ-SAhw2M3bTSVuRn_1Pz19Mu8BGAzR3M8UWS86H6NXFw0xK0CwyDUdOx5FsW/pub?gid=0&single=true&output=csv'
 const closeMenu = () => (menuOpen.value = false)
 const openModal = (modal: Exclude<Modal, null>) => (activeModal.value = modal)
+const parseCsv = (csv: string) => {
+  const rows: string[][] = []
+  let row: string[] = []
+  let field = ''
+  let quoted = false
+
+  for (let index = 0; index < csv.length; index += 1) {
+    const character = csv[index]
+    const nextCharacter = csv[index + 1]
+
+    if (character === '"' && quoted && nextCharacter === '"') {
+      field += '"'
+      index += 1
+    } else if (character === '"') {
+      quoted = !quoted
+    } else if (character === ',' && !quoted) {
+      row.push(field.trim())
+      field = ''
+    } else if ((character === '\n' || character === '\r') && !quoted) {
+      if (character === '\r' && nextCharacter === '\n') index += 1
+      row.push(field.trim())
+      if (row.some(Boolean)) rows.push(row)
+      row = []
+      field = ''
+    } else {
+      field += character
+    }
+  }
+
+  if (field || row.length) {
+    row.push(field.trim())
+    if (row.some(Boolean)) rows.push(row)
+  }
+
+  return rows
+}
+const loadSchedule = async () => {
+  try {
+    const response = await fetch(scheduleCsvUrl, { cache: 'no-store' })
+    if (!response.ok) throw new Error('Schedule unavailable')
+    const [, ...rows] = parseCsv(await response.text())
+    scheduleEvents.value = rows.map(([church = '', event = '', startDate = '', endDate = '', day = '', location = '', notes = '']) => ({ church, event, startDate, endDate, day, location, notes })).filter(({ church, event }) => church || event)
+    scheduleStatus.value = 'ready'
+  } catch {
+    scheduleStatus.value = 'error'
+  }
+}
+onMounted(loadSchedule)
 const submitContact = async (event: SubmitEvent) => {
   const form = event.currentTarget
   if (!(form instanceof HTMLFormElement)) return
@@ -57,14 +117,14 @@ const submitContact = async (event: SubmitEvent) => {
     contactStatus.value = 'error'
   }
 }
-const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', '#calling'], ['Vision', '#vision'], ['Prayer', '#prayer'], ['Support', '#support'], ['Contact', '#contact']]
+const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', '#calling'], ['Vision', '#vision'], ['Prayer', '#prayer'], ['Schedule', '#schedule']]
 </script>
 
 <template>
   <header class="site-header">
     <a class="brand" href="#home" @click="closeMenu"><img class="brand-logo" :src="brandLogo" alt="Gammad to the Philippines" /></a>
     <button class="menu-toggle" type="button" :aria-expanded="menuOpen" aria-controls="site-navigation" @click="menuOpen = !menuOpen"><span></span><span></span><span></span><span class="sr-only">Toggle navigation</span></button>
-    <nav id="site-navigation" :class="{ open: menuOpen }" aria-label="Main navigation"><a v-for="[label, href] in navigation" :key="href" :href="href" @click="closeMenu">{{ label }}</a><a class="nav-give" href="#support" @click="closeMenu">Partner With Us</a></nav>
+    <nav id="site-navigation" :class="{ open: menuOpen }" aria-label="Main navigation"><a v-for="[label, href] in navigation" :key="href" :href="href" @click="closeMenu">{{ label }}</a><a class="nav-give" href="#contact" @click="closeMenu">Contact Us</a></nav>
   </header>
 
   <main @click="closeMenu">
@@ -102,7 +162,7 @@ const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', 
     </section>
 
     <section id="prayer" class="prayer section-shell section-navy"><div class="section-heading light-heading"><p class="eyebrow">Please pray for</p><h2>Labourers for<br />the harvest.</h2></div><ol class="prayer-list"><li>A specific area and location to serve</li><li>A church building and start-up fund</li><li>Wisdom, good health, and safety during deputation</li><li>Churches to partner with us</li><li>Salvation and discipleship of lost souls</li></ol><a class="button button-gold" href="mailto:gammadtophilippines@gmail.com?subject=We%20are%20praying%20for%20you">Tell Us You Are Praying</a></section>
-    <section id="support" class="support section-shell section-gold"><div><p class="eyebrow">Partner with us</p><h2>Together, we can reach the Philippines for Christ.</h2></div><div class="support-copy"><p>Your prayers, encouragement, and financial support make this ministry possible. Thank you for considering a partnership with our family.</p><a class="button button-navy" href="mailto:gammadtophilippines@gmail.com?subject=Support%20the%20Gammad%20Family">Ask About Supporting</a></div></section>
+     <section id="schedule" class="schedule section-shell section-gold"><div class="section-heading light-heading"><p class="eyebrow">Where we will be</p><h2>Our schedule.</h2></div><div class="schedule-content"><p v-if="scheduleStatus === 'loading'" class="schedule-message">Loading upcoming meetings...</p><p v-else-if="scheduleStatus === 'error'" class="schedule-message">The schedule is temporarily unavailable. Please check back soon.</p><p v-else-if="!scheduleEvents.length" class="schedule-message">No upcoming meetings are currently scheduled.</p><div v-else class="schedule-table-wrap"><table class="schedule-table"><thead><tr><th scope="col">Date</th><th scope="col">Church / Event</th><th scope="col">Location</th></tr></thead><tbody><tr v-for="meeting in scheduleEvents" :key="`${meeting.startDate}-${meeting.church}-${meeting.event}`"><td><strong>{{ meeting.startDate === meeting.endDate ? meeting.startDate : `${meeting.startDate} – ${meeting.endDate}` }}</strong><span v-if="meeting.day">{{ meeting.day }}</span></td><td><strong>{{ meeting.church }}</strong><span>{{ meeting.event }}</span><small v-if="meeting.notes">{{ meeting.notes }}</small></td><td>{{ meeting.location || 'TBD' }}</td></tr></tbody></table></div></div></section>
     <section id="contact" class="contact section-shell section-cream"><div class="section-heading"><p class="eyebrow">Contact us</p><h2>Let's connect.</h2></div><div class="contact-content"><address><a href="mailto:gammadtophilippines@gmail.com"><span>Email</span> gammadtophilippines@gmail.com</a><a href="tel:+17738071597"><span>Phone</span> 773-807-1597</a><p><span>Sending church</span> Northwest Bible Baptist Church<br />9N889 Nesler Road, Elgin, IL 60124</p><p><span>Mission board</span> Northwest Bible Baptist Missions<br />9N889 Nesler Road, Elgin, IL 60124</p></address><form class="contact-form" :action="formspreeEndpoint" method="POST" aria-label="Send a message" @submit.prevent="submitContact"><input type="hidden" name="_subject" value="New message from the Gammad family website" /><label for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name" required /><label for="contact-email">Email</label><input id="contact-email" name="email" type="email" autocomplete="email" required /><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="6" required></textarea><button class="button button-navy" type="submit" :disabled="contactStatus === 'sending'">{{ contactStatus === 'sending' ? 'Sending…' : 'Send Message' }}</button><p v-if="contactStatus === 'success'" class="form-status form-success" role="status">Your message has been sent. Thank you for reaching out.</p><p v-else-if="contactStatus === 'error'" class="form-status form-error" role="alert">{{ contactError }}</p></form></div></section>
   </main>
   <footer @click="closeMenu"><p>© {{ new Date().getFullYear() }} The Gammad Family</p><p>Missionaries to the Philippines</p><a href="#home">Back to top ↑</a></footer>
