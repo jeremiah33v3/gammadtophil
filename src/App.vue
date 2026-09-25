@@ -36,6 +36,32 @@ const formspreeEndpoint = 'https://formspree.io/f/moeqrlqv'
 const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQverJcq0felR6sZCasQ-SAhw2M3bTSVuRn_1Pz19Mu8BGAzR3M8UWS86H6NXFw0xK0CwyDUdOx5FsW/pub?gid=0&single=true&output=csv'
 const closeMenu = () => (menuOpen.value = false)
 const openModal = (modal: Exclude<Modal, null>) => (activeModal.value = modal)
+const parseScheduleDate = (value: string) => {
+  const match = value.match(/^([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})$/)
+  if (!match) return Number.MAX_SAFE_INTEGER
+  const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'].indexOf(match[1].slice(0, 3).toLowerCase())
+  return month < 0 ? Number.MAX_SAFE_INTEGER : Date.UTC(Number(match[3]), month, Number(match[2]))
+}
+const formatScheduleDate = (startDate: string, endDate: string) => {
+  const start = parseScheduleDate(startDate)
+  const end = parseScheduleDate(endDate)
+  if (start === Number.MAX_SAFE_INTEGER || end === Number.MAX_SAFE_INTEGER) return startDate === endDate ? startDate : `${startDate} – ${endDate}`
+
+  const startValue = new Date(start)
+  const endValue = new Date(end)
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const startMonth = months[startValue.getUTCMonth()]
+  const endMonth = months[endValue.getUTCMonth()]
+  const startDay = startValue.getUTCDate()
+  const endDay = endValue.getUTCDate()
+  const startYear = startValue.getUTCFullYear()
+  const endYear = endValue.getUTCFullYear()
+
+  if (start === end) return `${startMonth} ${startDay}, ${startYear}`
+  if (startYear === endYear && startValue.getUTCMonth() === endValue.getUTCMonth()) return `${startMonth} ${startDay}–${endDay}, ${startYear}`
+  if (startYear === endYear) return `${startMonth} ${startDay}–${endMonth} ${endDay}, ${startYear}`
+  return `${startMonth} ${startDay}, ${startYear}–${endMonth} ${endDay}, ${endYear}`
+}
 const parseCsv = (csv: string) => {
   const rows: string[][] = []
   let row: string[] = []
@@ -77,7 +103,7 @@ const loadSchedule = async () => {
     const response = await fetch(scheduleCsvUrl, { cache: 'no-store' })
     if (!response.ok) throw new Error('Schedule unavailable')
     const [, ...rows] = parseCsv(await response.text())
-    scheduleEvents.value = rows.map(([church = '', event = '', startDate = '', endDate = '', day = '', location = '', notes = '']) => ({ church, event, startDate, endDate, day, location, notes })).filter(({ church, event }) => church || event)
+    scheduleEvents.value = rows.map(([church = '', event = '', startDate = '', endDate = '', day = '', location = '', notes = '']) => ({ church, event, startDate, endDate, day, location, notes })).filter(({ church, event }) => church || event).sort((left, right) => parseScheduleDate(left.startDate) - parseScheduleDate(right.startDate))
     scheduleStatus.value = 'ready'
   } catch {
     scheduleStatus.value = 'error'
@@ -162,7 +188,7 @@ const navigation = [['Home', '#home'], ['Salvation', '#salvation'], ['Calling', 
     </section>
 
     <section id="prayer" class="prayer section-shell section-navy"><div class="section-heading light-heading"><p class="eyebrow">Please pray for</p><h2>Labourers for<br />the harvest.</h2></div><ol class="prayer-list"><li>A specific area and location to serve</li><li>A church building and start-up fund</li><li>Wisdom, good health, and safety during deputation</li><li>Churches to partner with us</li><li>Salvation and discipleship of lost souls</li></ol><a class="button button-gold" href="mailto:gammadtophilippines@gmail.com?subject=We%20are%20praying%20for%20you">Tell Us You Are Praying</a></section>
-     <section id="schedule" class="schedule section-shell section-gold"><div class="section-heading light-heading"><p class="eyebrow">Where we will be</p><h2>Our schedule.</h2></div><div class="schedule-content"><p v-if="scheduleStatus === 'loading'" class="schedule-message">Loading upcoming meetings...</p><p v-else-if="scheduleStatus === 'error'" class="schedule-message">The schedule is temporarily unavailable. Please check back soon.</p><p v-else-if="!scheduleEvents.length" class="schedule-message">No upcoming meetings are currently scheduled.</p><div v-else class="schedule-table-wrap"><table class="schedule-table"><thead><tr><th scope="col">Date</th><th scope="col">Church / Event</th><th scope="col">Location</th></tr></thead><tbody><tr v-for="meeting in scheduleEvents" :key="`${meeting.startDate}-${meeting.church}-${meeting.event}`"><td><strong>{{ meeting.startDate === meeting.endDate ? meeting.startDate : `${meeting.startDate} – ${meeting.endDate}` }}</strong><span v-if="meeting.day">{{ meeting.day }}</span></td><td><strong>{{ meeting.church }}</strong><span>{{ meeting.event }}</span><small v-if="meeting.notes">{{ meeting.notes }}</small></td><td>{{ meeting.location || 'TBD' }}</td></tr></tbody></table></div></div></section>
+     <section id="schedule" class="schedule section-shell section-gold"><div class="section-heading light-heading"><p class="eyebrow">Where we will be</p><h2>Our schedule.</h2></div><div class="schedule-content"><p v-if="scheduleStatus === 'loading'" class="schedule-message">Loading upcoming meetings...</p><p v-else-if="scheduleStatus === 'error'" class="schedule-message">The schedule is temporarily unavailable. Please check back soon.</p><p v-else-if="!scheduleEvents.length" class="schedule-message">No upcoming meetings are currently scheduled.</p><div v-else class="schedule-table-wrap"><table class="schedule-table"><thead><tr><th scope="col">Church / Event</th><th scope="col">Date</th><th scope="col">Location</th></tr></thead><tbody><tr v-for="meeting in scheduleEvents" :key="`${meeting.startDate}-${meeting.church}-${meeting.event}`"><td><strong>{{ meeting.church }}</strong><span>{{ meeting.event }}</span><small v-if="meeting.notes">{{ meeting.notes }}</small></td><td><strong>{{ formatScheduleDate(meeting.startDate, meeting.endDate) }}</strong><span v-if="meeting.day">{{ meeting.day }}</span></td><td>{{ meeting.location || 'TBD' }}</td></tr></tbody></table></div></div></section>
     <section id="contact" class="contact section-shell section-cream"><div class="section-heading"><p class="eyebrow">Contact us</p><h2>Let's connect.</h2></div><div class="contact-content"><address><a href="mailto:gammadtophilippines@gmail.com"><span>Email</span> gammadtophilippines@gmail.com</a><a href="tel:+17738071597"><span>Phone</span> 773-807-1597</a><p><span>Sending church</span> Northwest Bible Baptist Church<br />9N889 Nesler Road, Elgin, IL 60124</p><p><span>Mission board</span> Northwest Bible Baptist Missions<br />9N889 Nesler Road, Elgin, IL 60124</p></address><form class="contact-form" :action="formspreeEndpoint" method="POST" aria-label="Send a message" @submit.prevent="submitContact"><input type="hidden" name="_subject" value="New message from the Gammad family website" /><label for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name" required /><label for="contact-email">Email</label><input id="contact-email" name="email" type="email" autocomplete="email" required /><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="6" required></textarea><button class="button button-navy" type="submit" :disabled="contactStatus === 'sending'">{{ contactStatus === 'sending' ? 'Sending…' : 'Send Message' }}</button><p v-if="contactStatus === 'success'" class="form-status form-success" role="status">Your message has been sent. Thank you for reaching out.</p><p v-else-if="contactStatus === 'error'" class="form-status form-error" role="alert">{{ contactError }}</p></form></div></section>
   </main>
   <footer @click="closeMenu"><p>© {{ new Date().getFullYear() }} The Gammad Family</p><p>Missionaries to the Philippines</p><a href="#home">Back to top ↑</a></footer>
