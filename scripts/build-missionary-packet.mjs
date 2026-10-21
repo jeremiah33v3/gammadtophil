@@ -231,7 +231,7 @@ y = pageTitle('Personal testimony', 'Shiela’s salvation testimony')
 const shielaStory = [
   'I am thankful for a coworker who eventually became one of my good friends. She faithfully invited me to church many times, but because I grew up in a Catholic background, I always found reasons not to go.',
   'One day, she invited me to attend a youth camp. As a young lady who loved the outdoors, I was finally convinced to go.',
-  'I still remember the preaching at that camp. The message was about hell, and it caused me to seriously consider where I would spend eternity. A lady sat down with me and showed me from the Bible how I could be saved. In June of 1998, I accepted Jesus Christ as my personal Saviour.',
+  'I still remember the preaching at that camp. The message was about hell, and it caused me to seriously consider where I would spend eternity. During an invitation at that youth camp, a lady sat down with me and showed me from the Bible how I could be saved. In June of 1998, I accepted Jesus Christ as my personal Saviour.',
   'Although I had trusted Christ, I did not immediately grow in my faith. Then, in November 28, 2004, God helped me gain assurance of my salvation. I followed the Lord in baptism and began faithfully attending a Bible-believing Baptist church, where I started growing in my relationship with the Lord.',
   'I am especially thankful that God used the persistence and faithfulness of a friend who never stopped inviting me to church.',
 ]
