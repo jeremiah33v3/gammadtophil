@@ -11,8 +11,8 @@ const OUTPUT = path.join(ROOT, creamStock ? 'missionary-packet-cream-stock.pdf' 
 const files = {
   logo: 'Gammad_to_the_Philippines_Logo_Transparent.png',
   icon: 'Gammad_Icon_Transparent.png',
-  coverFamily: 'Family Picture 2.JPG',
-  family: 'gammad-family.jpeg',
+  coverFamily: 'gammad-family.jpeg',
+  family: 'Family Picture 2.JPG',
   holyWeek: 'holyweek-pilgrims-to-antipolo cathedral.jpg',
   nazarene: 'black nazarene 2.jpg',
   reach: 'preaching at garment factory.JPG',
@@ -163,19 +163,19 @@ function checkBottom(label, y) {
 
 // Cover
 addPage()
-doc.roundedRect(58, 78, 496, 309, 4).fill(colors.white)
-imageContain(image(files.logo), 75, 88, 462, 291)
+doc.roundedRect(58, 78, 496, 270, 4).fill(colors.white)
+imageContain(image(files.logo), 75, 88, 462, 250)
 doc.save()
-doc.roundedRect(71, 398, 470, 250, 4).clip()
-imageCover(image(files.coverFamily), 71, 398, 470, 250, { offsetY: 0.31 })
+doc.roundedRect(71, 355, 470, 285, 4).clip()
+imageCover(image(files.coverFamily), 71, 355, 470, 285, { offsetY: 0 })
 doc.restore()
-doc.roundedRect(71, 398, 470, 250, 4).lineWidth(1.4).strokeColor(colors.line).stroke()
+doc.roundedRect(71, 355, 470, 285, 4).lineWidth(1.4).strokeColor(colors.line).stroke()
 doc.font('SerifBold').fontSize(29).fillColor(colors.navy)
-  .text('For the harvest.', 76, 662, { width: 460, align: 'center' })
+  .text('For the harvest.', 76, 653, { width: 460, align: 'center' })
 doc.font('BodyBold').fontSize(10.4).fillColor(colors.gold)
-  .text('ROMMEL  •  SHIELA  •  RYLE GAMMAD', 76, 704, { width: 460, align: 'center', characterSpacing: 1.1 })
+  .text('ROMMEL  •  SHIELA  •  RYLE GAMMAD', 76, 695, { width: 460, align: 'center', characterSpacing: 1.1 })
 doc.font('Body').fontSize(9.1).fillColor(colors.ink)
-  .text('Missionaries to the Philippines', 76, 722, { width: 460, align: 'center' })
+  .text('Missionaries to the Philippines', 76, 713, { width: 460, align: 'center' })
 
 // Family introduction
 addPage()
@@ -214,7 +214,6 @@ const rommelStory = [
   'During college and the years that followed, I developed sinful habits and a worldly lifestyle, but after losing my father, God began to soften my heart and draw me to Himself.',
   'One day, God used a daily devotional about salvation to show me my true spiritual condition. I realized that I was a sinner and that my religion, good works, and religious activities could never save me. I needed Jesus Christ.',
   'In 2004, one morning while sitting at my desk in the office, I bowed my head and asked God to save me. I placed my faith in Jesus Christ and trusted Him alone for my salvation.',
-  'Not long afterward, I brought my mother and siblings to Alpha Baptist Church. God continued to work in their hearts, and eventually every one of them was saved. Our family was baptized together.',
 ]
 y += 4
 for (const text of rommelStory) y = paragraph(text, LEFT, y, CONTENT_W, { size: 10.7, lineGap: 3.5, after: 9 })
@@ -242,6 +241,17 @@ doc.font('SerifBold').fontSize(12).fillColor(colors.navy)
 doc.font('Mono').fontSize(7.2).fillColor(colors.gold)
   .text('SAVED BY GRACE  •  GROWING IN CHRIST', LEFT + 14, y + 44, { width: CONTENT_W - 28, align: 'center', characterSpacing: 0.85 })
 checkBottom('Shiela’s testimony', y + 82)
+
+// Ryle's testimony
+addPage()
+y = pageTitle('Personal testimony', 'Ryle’s salvation testimony')
+const ryleStory = [
+  'When I was six years old, I remember hearing about salvation, but I never really knew what it meant. Coming home from church one night, I asked my dad what it meant to be saved. He took me through the Gospel, and I made a profession of faith that day.',
+  'Coming to Northwest Bible Baptist Church was a big change for me. I had never felt conviction in my life before, so I doubted my salvation. All the way up until 2022, I felt fear and insecurity about where I would go when I died.',
+  'At football camp in August 2022, Bro. Nichols preached a powerful message on hell. It was not until Thursday night of that week that God moved in my heart and I went forward for assurance. Bro. Jeremy Huston dealt with me, and I gained assurance of my salvation. I have never doubted it since that day.',
+]
+for (const text of ryleStory) y = paragraph(text, LEFT, y, CONTENT_W, { size: 10.7, lineGap: 3.5, after: 9 })
+checkBottom('Ryle’s testimony', y)
 
 // Calling story and timeline
 addPage()
@@ -276,10 +286,10 @@ const callingStory = [
   'With my pastor’s encouragement and God’s provision, I enrolled in Providence Baptist College in January 2025 to pursue a Master’s degree in Biblical Studies. I began teaching a Tagalog Sunday School class and preaching regularly in our nursing home ministry.',
   'As I balanced work, school, family, and ministry, I began earnestly praying that God would clearly show me His will concerning full-time ministry.',
   'For twenty-five years, I had built a good career and enjoyed financial security. In January 2026, God brought the story of Abraham in Genesis 12 to my heart. I came to realize that following God’s will would require me to trust Him beyond what was comfortable and secure.',
-  'That same month, my company announced a departmental restructuring. Because I had already expressed my desire to leave and pursue missions, I volunteered to be included in the workforce reduction. I had a deep sense of peace, knowing that God had answered my prayer and opened the door for me to follow His will. On January 21, 2026, my family and I surrendered to full-time missions.',
+  'That same month, my company announced a departmental restructuring. I saw this as God’s answer to my prayers and an open door to follow His will, so I volunteered for the workforce reduction and surrendered to full-time missions.',
 ]
 let callY = timelineTop + 107
-for (const text of callingStory) callY = paragraph(text, LEFT, callY, CONTENT_W, { size: 9.7, lineGap: 2.4, after: 5.4 })
+for (const text of callingStory) callY = paragraph(text, LEFT, callY, CONTENT_W, { size: 10.7, lineGap: 2.5, after: 5.4 })
 checkBottom('God’s calling story', callY)
 
 // Why the Philippines?
@@ -291,7 +301,7 @@ const philippinesStory = [
   'According to the 2020 Census, 78.8 percent identified as Roman Catholic, 6.4 percent as Muslim, 4.8% as Evangelical, and 2.6% as Iglesia ni Cristo, while Bible Baptist Church accounted for only 0.5%. There are millions of people who still need to hear the Gospel.',
   'God has used faithful American missionaries and raised up many Filipino Baptist preachers and missionaries. We believe there remains a tremendous need for independent, fundamental Baptist churches that faithfully proclaim the Gospel, stand firmly on the authority of Scripture, actively engage in soul winning, and carry out the Great Commission.',
 ]
-for (const text of philippinesStory) y = paragraph(text, LEFT, y, CONTENT_W, { size: 9.9, lineGap: 2.6, after: 6 })
+for (const text of philippinesStory) y = paragraph(text, LEFT, y, CONTENT_W, { size: 10.7, lineGap: 2.6, after: 6 })
 
 const photoTop = Math.max(y + 4, 530)
 const fieldPhotoW = 244
@@ -306,7 +316,7 @@ checkBottom('Why the Philippines photos', photoTop + fieldPhotoH + 22)
 addPage()
 y = pageTitle('Our ministry vision', 'Reach. Plant. Disciple. Train.')
 const visionIntro = 'A Gospel-centered ministry that reaches people, establishes churches, and prepares faithful workers.'
-doc.font('Body').fontSize(10).fillColor(colors.muted)
+doc.font('Body').fontSize(10.7).fillColor(colors.muted)
 const visionIntroY = y - 1
 const visionIntroHeight = doc.heightOfString(visionIntro, { width: CONTENT_W, lineGap: 2 })
 doc.text(visionIntro, LEFT, visionIntroY, { width: CONTENT_W, lineGap: 2 })
@@ -333,7 +343,7 @@ visionCards.forEach((item, index) => {
     .text(item.number, x + 14, top + 147, { characterSpacing: 0.9 })
   doc.font('SerifBold').fontSize(17).fillColor(colors.navy)
     .text(item.title, x + 43, top + 142, { width: cardW - 56 })
-  doc.font('Body').fontSize(9.1).fillColor(colors.ink)
+  doc.font('Body').fontSize(10.7).fillColor(colors.ink)
     .text(item.text, x + 14, top + 174, { width: cardW - 28, lineGap: 2.7 })
 })
 
@@ -397,7 +407,7 @@ function drawFaithPage(sections, continuation = false) {
       .text(section.title, LEFT, top, { width: CONTENT_W })
     const titleHeight = doc.heightOfString(section.title, { width: CONTENT_W })
     top += titleHeight + 3
-    top = paragraph(section.text, LEFT, top, CONTENT_W, { size: 9.7, lineGap: 2.1, after: 8.2 })
+    top = paragraph(section.text, LEFT, top, CONTENT_W, { size: 10.7, lineGap: 2.3, after: 5.5 })
   }
   checkBottom('Statement of faith page', top)
 }
@@ -423,7 +433,7 @@ drawFaithPage([
 addPage()
 y = pageTitle('Stay connected', 'Partner with us in prayer.')
 doc.font('Body').fontSize(10.1).fillColor(colors.muted)
-  .text('We would be grateful for your prayers and fellowship as we prepare to serve in the Philippines.', LEFT, y - 1, { width: CONTENT_W })
+  .text('We would be grateful for your prayers and support as we prepare to serve in the Philippines.', LEFT, y - 1, { width: CONTENT_W })
 
 const contactTop = 166
 doc.roundedRect(LEFT, contactTop, 245, 337, 3).fill(colors.white)
