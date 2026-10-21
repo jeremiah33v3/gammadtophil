@@ -419,25 +419,6 @@ drawFaithPage([
   faithSections.judgment,
 ], true)
 
-// Recommendation letter placeholder
-addPage()
-y = pageTitle('Recommendation', 'A word from our pastor')
-doc.roundedRect(LEFT, 165, CONTENT_W, 500, 3).lineWidth(1).strokeColor(colors.line).stroke()
-doc.roundedRect(LEFT + 22, 198, CONTENT_W - 44, 126, 3).fill(colors.cream)
-doc.font('Mono').fontSize(7.8).fillColor(colors.gold)
-  .text('LETTER TO BE ADDED', LEFT + 38, 220, { characterSpacing: 1.1 })
-doc.font('SerifBold').fontSize(17).fillColor(colors.navy)
-  .text('Pastor’s recommendation', LEFT + 38, 244, { width: CONTENT_W - 76, align: 'center' })
-doc.font('Body').fontSize(9.7).fillColor(colors.muted)
-  .text('This page is reserved for the recommendation letter from our pastor. The signed letter will be inserted here when available.', LEFT + 38, 277, {
-    width: CONTENT_W - 76,
-    align: 'center',
-    lineGap: 3.5,
-  })
-doc.moveTo(LEFT + 45, 553).lineTo(RIGHT - 45, 553).lineWidth(0.65).strokeColor(colors.line).stroke()
-doc.font('Mono').fontSize(7.1).fillColor(colors.muted)
-  .text('PASTOR’S SIGNATURE / CHURCH LETTERHEAD', LEFT + 45, 563, { width: CONTENT_W - 90, align: 'center', characterSpacing: 0.5 })
-
 // Contact and prayer
 addPage()
 y = pageTitle('Stay connected', 'Partner with us in prayer.')
