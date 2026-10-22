@@ -11,7 +11,7 @@ const OUTPUT = path.join(ROOT, creamStock ? 'missionary-packet-cream-stock.pdf' 
 const files = {
   logo: 'Gammad_to_the_Philippines_Logo_Transparent.png',
   icon: 'Gammad_Icon_Transparent.png',
-  coverFamily: 'gammad-family.jpeg',
+  coverFamily: 'family pic 3.png',
   family: 'Family Picture 2.JPG',
   holyWeek: 'holyweek-pilgrims-to-antipolo cathedral.jpg',
   nazarene: 'black nazarene 2.jpg',
@@ -165,11 +165,9 @@ function checkBottom(label, y) {
 addPage()
 doc.roundedRect(58, 78, 496, 270, 4).fill(colors.white)
 imageContain(image(files.logo), 75, 88, 462, 250)
-doc.save()
-doc.roundedRect(71, 390, 470, 250, 4).clip()
-imageCover(image(files.coverFamily), 71, 390, 470, 250, { offsetY: 0.27 })
-doc.restore()
-doc.roundedRect(71, 390, 470, 250, 4).lineWidth(1.4).strokeColor(colors.line).stroke()
+doc.roundedRect(96, 358, 420, 281, 4).fill(colors.white)
+imageContain(image(files.coverFamily), 96, 358, 420, 281)
+doc.roundedRect(96, 358, 420, 281, 4).lineWidth(1.4).strokeColor(colors.line).stroke()
 doc.font('SerifBold').fontSize(29).fillColor(colors.navy)
   .text('For the harvest.', 76, 653, { width: 460, align: 'center' })
 doc.font('BodyBold').fontSize(10.4).fillColor(colors.gold)
