@@ -173,7 +173,7 @@ doc.roundedRect(71, 390, 470, 250, 4).lineWidth(1.4).strokeColor(colors.line).st
 doc.font('SerifBold').fontSize(29).fillColor(colors.navy)
   .text('For the harvest.', 76, 653, { width: 460, align: 'center' })
 doc.font('BodyBold').fontSize(10.4).fillColor(colors.gold)
-  .text('ROMMEL  •  SHIELA  •  RYLE GAMMAD', 76, 695, { width: 460, align: 'center', characterSpacing: 1.1 })
+  .text('ROMMEL  •  SHIELA  •  RYLE', 76, 695, { width: 460, align: 'center', characterSpacing: 1.1 })
 doc.font('Body').fontSize(9.1).fillColor(colors.ink)
   .text('Missionaries to the Philippines', 76, 713, { width: 460, align: 'center' })
 
