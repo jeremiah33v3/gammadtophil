@@ -2,11 +2,17 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import PDFDocument from 'pdfkit'
+import sharp from 'sharp'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const ASSETS = path.join(ROOT, 'src', 'assets')
 const creamStock = process.argv.includes('--cream-stock')
-const OUTPUT = path.join(ROOT, creamStock ? 'missionary-packet-cream-stock.pdf' : 'missionary-packet-draft.pdf')
+const profile = process.argv.includes('--email') ? 'email' : process.argv.includes('--print') ? 'print' : 'original'
+const stockName = creamStock ? 'Cream_Stock' : 'White_Paper'
+const outputName = profile === 'original'
+  ? (creamStock ? 'missionary-packet-cream-stock.pdf' : 'missionary-packet-draft.pdf')
+  : `Gammad_Missionary_Packet_${profile === 'email' ? 'Email' : 'Print'}_${stockName}.pdf`
+const OUTPUT = path.join(ROOT, outputName)
 
 const files = {
   logo: 'Gammad_to_the_Philippines_Logo_Transparent.png',
@@ -21,7 +27,37 @@ const files = {
   train: 'preaching at youth fellowship.JPG',
 }
 
-const image = (name) => path.join(ASSETS, name)
+const assetPath = (name) => path.join(ASSETS, name)
+const optimizedImages = new Map()
+
+if (profile !== 'original') {
+  const email = profile === 'email'
+  const quality = email ? 72 : 87
+  const sizes = {
+    logo: email ? [760, 540] : [1250, 900],
+    icon: email ? [80, 80] : [180, 180],
+    coverFamily: email ? [950, 650] : [1600, 1100],
+    family: email ? [650, 900] : [1200, 1600],
+    holyWeek: email ? [700, 500] : [1100, 800],
+    nazarene: email ? [700, 500] : [1100, 800],
+    reach: email ? [700, 500] : [1100, 800],
+    plant: email ? [700, 500] : [1100, 800],
+    disciple: email ? [700, 500] : [1100, 800],
+    train: email ? [700, 500] : [1100, 800],
+  }
+
+  await Promise.all(Object.entries(files).map(async ([key, name]) => {
+    const source = assetPath(name)
+    const [width, height] = sizes[key]
+    const processor = sharp(source).resize(width, height, { fit: 'inside', withoutEnlargement: true })
+    const data = key === 'logo' || key === 'icon'
+      ? await processor.png({ compressionLevel: 9 }).toBuffer()
+      : await processor.jpeg({ quality, mozjpeg: true }).toBuffer()
+    optimizedImages.set(name, data)
+  }))
+}
+
+const image = (name) => optimizedImages.get(name) ?? assetPath(name)
 const colors = {
   navy: '#06294b',
   ink: '#0a2748',
@@ -49,7 +85,7 @@ const fontPaths = {
   Mono: path.join(FONT_PATH, 'DejaVuSansMono.ttf'),
 }
 
-for (const file of [...Object.values(files).map(image), ...Object.values(fontPaths)]) {
+for (const file of [...Object.values(files).map(assetPath), ...Object.values(fontPaths)]) {
   if (!fs.existsSync(file)) throw new Error(`Required packet asset was not found: ${file}`)
 }
 
